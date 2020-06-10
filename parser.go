@@ -2,7 +2,6 @@ package main
 
 import (
 	"bufio"
-	"flag"
 	"fmt"
 	"os"
 	"regexp"
@@ -11,14 +10,15 @@ import (
 )
 
 func parser() (float64, float64, float64) {
-	flag.Parse()
-	s1 := flag.Arg(0)
-
-	//init equation
-	if s1 != "" {
-		//print formula
-		s := fmt.Sprintf("%sFormula:%s %s\n", string(colorB), string(colorReset), s1)
-		fmt.Println(s)
+	s1 := ""
+	if len(os.Args) == 2 {
+		//init equation
+		s1 = os.Args[1]
+		if s1 != "" {
+			//print formula
+			s := fmt.Sprintf("%sFormula:%s %s\n", string(colorB), string(colorReset), s1)
+			fmt.Println(s)
+		}
 	}
 	for s1 == "" {
 		s1 = "4 * X^2 + 4 * X^1 + 1 * X^0 = 0" // Δ = 0
@@ -88,34 +88,35 @@ func parser() (float64, float64, float64) {
 	degreeError := 0.0
 
 	for i := range firstPart {
-		if strings.Contains(strings.ToLower(firstPart[i]), "*x^2") {
+		firstPart[i] = strings.ToLower(firstPart[i])
+		if strings.Contains(firstPart[i], "*x^2") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			a += v
-		} else if strings.Contains(strings.ToLower(firstPart[i]), "*x^1") {
+		} else if strings.Contains(firstPart[i], "*x^1") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			b += v
-		} else if strings.Contains(strings.ToLower(firstPart[i]), "*x^0") {
+		} else if strings.Contains(firstPart[i], "*x^0") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
 			c += v
-		} else if strings.Contains(strings.ToLower(firstPart[i]), "x^2") {
+		} else if strings.Contains(firstPart[i], "x^2") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			a += v
-		} else if strings.Contains(strings.ToLower(firstPart[i]), "x^") {
+		} else if strings.Contains(firstPart[i], "x^") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			degreeError = v
-		} else if strings.Contains(strings.ToLower(firstPart[i]), "x") {
+		} else if strings.Contains(firstPart[i], "x") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
@@ -127,36 +128,37 @@ func parser() (float64, float64, float64) {
 		}
 	}
 	for i := range secondPart {
-		if strings.Contains(strings.ToLower(secondPart[i]), "*x^2") {
+		secondPart[i] = strings.ToLower(secondPart[i])
+		if strings.Contains(secondPart[i], "*x^2") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			a2 += v
-		} else if strings.Contains(strings.ToLower(secondPart[i]), "*x^1") {
+		} else if strings.Contains(secondPart[i], "*x^1") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			b2 += v
-		} else if strings.Contains(strings.ToLower(secondPart[i]), "*x^0") {
+		} else if strings.Contains(secondPart[i], "*x^0") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
 			c2 += v
-		} else if strings.Contains(strings.ToLower(secondPart[i]), "x^2") {
+		} else if strings.Contains(secondPart[i], "x^2") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			a2 += v
-		} else if strings.Contains(strings.ToLower(secondPart[i]), "x^") {
+		} else if strings.Contains(secondPart[i], "x^") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			degreeError = v
-		} else if strings.Contains(strings.ToLower(secondPart[i]), "x") {
+		} else if strings.Contains(secondPart[i], "x") {
 			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
 				v = 1
 			}
 			b2 += v

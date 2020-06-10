@@ -16,15 +16,30 @@ func degreeTwo(a float64, b float64, c float64) {
 		x1 := ((-b) + math.Sqrt(delta)) / (2 * a)
 		x2 := ((-b) - math.Sqrt(delta)) / (2 * a)
 		fmt.Println("\nDiscriminant is strictly positive, the two Real solutions are:")
-		fmt.Printf("%sx1:%s %g\n", string(colorG), string(colorReset), x1)
-		fmt.Printf("%sx2:%s %g\n", string(colorG), string(colorReset), x2)
+		fmt.Printf("%sx1:%s %g", string(colorG), string(colorReset), x1)
+		v, div := floatToFrac(x1)
+		if !(div == 1.0 || int(div)%10 == 0) {
+			fmt.Printf(" %s:%s %g/%g", string(colorG), string(colorReset), v, div)
+		}
+		fmt.Println("")
+		fmt.Printf("%sx2:%s %g", string(colorG), string(colorReset), x2)
+		v, div = floatToFrac(x2)
+		if !(div == 1.0 || int(div)%10 == 0) {
+			fmt.Printf(" %s:%s %g/%g", string(colorG), string(colorReset), v, div)
+		}
+		fmt.Println("")
 	}
 
 	// Δ = 0
 	if delta == 0 {
 		x := -b / (2 * a)
 		fmt.Println("\nDiscriminant is null, the one Real solution is:")
-		fmt.Printf("%sx:%s %g\n", string(colorG), string(colorReset), x)
+		fmt.Printf("%sx:%s %g", string(colorG), string(colorReset), x)
+		v, div := floatToFrac(x)
+		if !(div == 1.0 || int(div)%10 == 0) {
+			fmt.Printf(" %s:%s %g/%g\n", string(colorG), string(colorReset), v, div)
+		}
+		fmt.Println("")
 	}
 
 	// Δ < 0
@@ -39,7 +54,12 @@ func degreeTwo(a float64, b float64, c float64) {
 
 func degreeOne(x float64, v float64) {
 	fmt.Printf("\n%sPolynomial degree:%s 1\nThe solution is:\n", string(colorB), string(colorReset))
-	fmt.Printf("%sx:%s %g\n", string(colorG), string(colorReset), v/x)
+	fmt.Printf("%sx:%s %g", string(colorG), string(colorReset), v/x)
+	v, div := floatToFrac(v / x)
+	if !(div == 1.0 || int(div)%10 == 0) {
+		fmt.Printf(" %s:%s %g/%g\n", string(colorG), string(colorReset), v, div)
+	}
+	fmt.Println("")
 }
 
 func degreeZero(v float64) {
@@ -48,4 +68,35 @@ func degreeZero(v float64) {
 	} else {
 		fmt.Println("\nI am pretty sure that what you wrote does not mean anything mathematicaly speaking.")
 	}
+}
+
+func floatToFrac(x float64) (float64, float64) {
+	isNeg := false
+	if x < 0 {
+		x = -x
+		isNeg = true
+	}
+	tolerance := 1.0E-6
+	h1 := 1.0
+	k1 := 0.0
+	h2 := 0.0
+	k2 := 1.0
+	b := x
+	for {
+		a := math.Floor(b)
+		aux := h1
+		h1 = a*h1 + h2
+		h2 = aux
+		aux = k1
+		k1 = a*k1 + k2
+		k2 = aux
+		b = 1 / (b - a)
+		if !(math.Abs(x-h1/k1) > x*tolerance) {
+			break
+		}
+	}
+	if isNeg {
+		h1 = -h1
+	}
+	return h1, k1
 }
