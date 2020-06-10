@@ -14,7 +14,7 @@ You can change the order, dual both form, put many arguments of same degree (but
 **Here is an example of result of the program:**
 ![screenshot](https://github.com/LudovicLemaire/computerV1/blob/master/git_images/Capture.PNG)
 
-**New: now print fractionnal result if not useless
+**New: now print fractionnal result if not useless**
 ![screenshot](https://raw.githubusercontent.com/LudovicLemaire/computerV1/master/git_images/CaptureWithFraction.PNG)
 
 
