@@ -68,14 +68,17 @@ func degreeTwo(a float64, b float64, c float64) {
 		fmt.Printf("%sx1:%s α - iβ\n", string(colorT), string(colorReset))
 		fmt.Printf("%sx2:%s α + iβ\n\n", string(colorT), string(colorReset))
 
+		fmt.Printf("%sx1:%s (-b - i√(-Δ)) / 2a\n", string(colorT), string(colorReset))
+		fmt.Printf("%sx1:%s (-b + i√(-Δ)) / 2a\n", string(colorT), string(colorReset))
+
 		fmt.Printf("%sx1:%s %s\n", string(colorT), string(colorReset), "(-b / 2a) - (i√(Δ) / 2a)")
 		fmt.Printf("%sx2:%s %s\n\n", string(colorT), string(colorReset), "(-b / 2a) + (i√(Δ) / 2a)")
 
 		fmt.Printf("%sx1:%s -%g/2*%g - i√(%g)/2*%g\n", string(colorT), string(colorReset), b, a, delta, a)
-		fmt.Printf("%sx1:%s -%g/2*%g + i√(%g)/2*%g\n\n", string(colorT), string(colorReset), b, a, delta, a)
+		fmt.Printf("%sx2:%s -%g/2*%g + i√(%g)/2*%g\n\n", string(colorT), string(colorReset), b, a, delta, a)
 
 		fmt.Printf("%sx1:%s -%g/%g - i√(%g)/%g\n", string(colorT), string(colorReset), b, 2*a, delta, 2*a)
-		fmt.Printf("%sx1:%s -%g/%g + i√(%g)/%g\n\n", string(colorT), string(colorReset), b, 2*a, delta, 2*a)
+		fmt.Printf("%sx2:%s -%g/%g + i√(%g)/%g\n\n", string(colorT), string(colorReset), b, 2*a, delta, 2*a)
 
 		fmt.Printf("%sx1:%s %s", string(colorG), string(colorReset), x1)
 		fmt.Printf("%sx2:%s %s\n", string(colorG), string(colorReset), x2)
@@ -96,7 +99,7 @@ func degreeTwo(a float64, b float64, c float64) {
 		}
 
 		fmt.Printf("%sx1:%s %s - i(%s)\n", string(colorP), string(colorReset), pt1, pt2)
-		fmt.Printf("%sx1:%s %s + i(%s)\n", string(colorP), string(colorReset), pt1, pt2)
+		fmt.Printf("%sx2:%s %s + i(%s)\n", string(colorP), string(colorReset), pt1, pt2)
 
 	}
 }
