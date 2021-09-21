@@ -53,11 +53,51 @@ func degreeTwo(a float64, b float64, c float64) {
 
 	// Δ < 0
 	if delta < 0 {
-		x1 := fmt.Sprintf("(%g + i√%+g) / %g\n", -b, -delta, 2*a)
-		x2 := fmt.Sprintf("(%g - i√%+g) / %g\n", -b, -delta, 2*a)
+
+		// α β
+		//x1 := fmt.Sprintf("(%g + i√%+g) / %g\n", -b, -delta, 2*a)
+		//x2 := fmt.Sprintf("(%g - i√%+g) / %g\n", -b, -delta, 2*a)
+
+		x1 := fmt.Sprintf("%g - i%g\n", -b/(2*a), Sqrt(-delta)/(2*a))
+		x2 := fmt.Sprintf("%g + i%g\n", -b/(2*a), Sqrt(-delta)/(2*a))
+
+		//x1 := fmt.Sprintf("%g\n", (-b/2*a)-(Sqrt(-delta)/2*a))
+		//x2 := fmt.Sprintf("%g\n", (-b/2*a)+(Sqrt(-delta)/2*a))
+
 		fmt.Println("\nDiscriminant is negative, the equation has no real solution, but has 2 complex solutions:")
+		fmt.Printf("%sx1:%s α - iβ\n", string(colorT), string(colorReset))
+		fmt.Printf("%sx2:%s α + iβ\n\n", string(colorT), string(colorReset))
+
+		fmt.Printf("%sx1:%s %s\n", string(colorT), string(colorReset), "(-b / 2a) - (i√(Δ) / 2a)")
+		fmt.Printf("%sx2:%s %s\n\n", string(colorT), string(colorReset), "(-b / 2a) + (i√(Δ) / 2a)")
+
+		fmt.Printf("%sx1:%s -%g/2*%g - i√(%g)/2*%g\n", string(colorT), string(colorReset), b, a, delta, a)
+		fmt.Printf("%sx1:%s -%g/2*%g + i√(%g)/2*%g\n\n", string(colorT), string(colorReset), b, a, delta, a)
+
+		fmt.Printf("%sx1:%s -%g/%g - i√(%g)/%g\n", string(colorT), string(colorReset), b, 2*a, delta, 2*a)
+		fmt.Printf("%sx1:%s -%g/%g + i√(%g)/%g\n\n", string(colorT), string(colorReset), b, 2*a, delta, 2*a)
+
 		fmt.Printf("%sx1:%s %s", string(colorG), string(colorReset), x1)
 		fmt.Printf("%sx2:%s %s\n", string(colorG), string(colorReset), x2)
+
+		var pt1 string
+		var pt2 string
+		v, div := floatToFrac(-b / (2 * a))
+		if !(div == 1.0 || int(div)%10 == 0) {
+			pt1 = fmt.Sprintf("%g/%g", v, div)
+		} else {
+			pt1 = fmt.Sprintf("%g", -b/2*a)
+		}
+		v, div = floatToFrac(Sqrt(-delta) / (2 * a))
+		if !(div == 1.0 || int(div)%10 == 0) {
+			pt2 = fmt.Sprintf("%g/%g", v, div)
+		} else {
+			pt2 = fmt.Sprintf("%g", Sqrt(-delta)/(2*a))
+		}
+
+		fmt.Printf("%sx1:%s %s - i(%s)\n", string(colorP), string(colorReset), pt1, pt2)
+		fmt.Printf("%sx1:%s %s + i(%s)\n", string(colorP), string(colorReset), pt1, pt2)
+
 	}
 }
 
