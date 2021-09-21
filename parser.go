@@ -9,6 +9,10 @@ import (
 	"strings"
 )
 
+func spacetrim(str string) string {
+	return strings.Join(strings.Fields(str), "")
+}
+
 func parser() (float64, float64, float64) {
 	s1 := ""
 	if len(os.Args) == 2 {
@@ -58,6 +62,14 @@ func parser() (float64, float64, float64) {
 	rmEqual := regexp.MustCompile(`=`)
 	splited := rmEqual.Split(s1, -1)
 
+	if len(splited) != 2 {
+		fmt.Printf("\n%sError parsing:%s formula is wrong\n", string(colorR), string(colorReset))
+		os.Exit(42)
+	} else if len(splited[0]) == 0 || len(splited[1]) == 0 {
+		fmt.Printf("\n%sError parsing:%s formula is wrong\n", string(colorR), string(colorReset))
+		os.Exit(42)
+	}
+
 	//cut per part
 	firstPart := strings.Split(strings.TrimSpace(splited[0]), ` `)
 	secondPart := strings.Split(strings.TrimSpace(splited[1]), ` `)
@@ -68,6 +80,16 @@ func parser() (float64, float64, float64) {
 	}
 	for i := range secondPart {
 		secondPart[i] = strings.TrimSpace(secondPart[i])
+	}
+
+	if len(firstPart) == 0 || len(secondPart) == 0 {
+		fmt.Printf("\n%sError parsing:%s formula is wrong\n", string(colorR), string(colorReset))
+		os.Exit(42)
+	}
+
+	if len(spacetrim(firstPart[0])) == 0 || len(spacetrim(secondPart[0])) == 0 {
+		fmt.Printf("\n%sError parsing:%s formula is wrong\n", string(colorR), string(colorReset))
+		os.Exit(42)
 	}
 
 	//add symbol for first part
@@ -171,7 +193,7 @@ func parser() (float64, float64, float64) {
 	if degreeError > 0 {
 		fmt.Printf("%sError:%s Polynomial degree: %g\n", string(colorR), string(colorReset), degreeError)
 		fmt.Println("The polynomial degree is stricly greater than 2, I can't solve.")
-		os.Exit(2)
+		os.Exit(42)
 	}
 	//
 	// print readable

@@ -1,4 +1,4 @@
-# ComputerV1
+# ComputorV1
 The program solves polynomial equations of degree less than or equal to 2.
 
 ## How to use
@@ -12,10 +12,10 @@ You can change the order, dual both form, put many arguments of same degree (but
  - x + 42 - 9x - 5 + 4 - 2x^2 + 4 + 4x^2 = 0 + 5 + 7 + 9 + 45 + 4x + 9x
 
 **Here is an example of result of the program:**
-![screenshot](https://github.com/LudovicLemaire/computerV1/blob/master/git_images/Capture.PNG)
+![screenshot](/git_images/Capture.PNG)
 
-**New: now print fractionnal result if not useless**
-![screenshot](https://raw.githubusercontent.com/LudovicLemaire/computerV1/master/git_images/CaptureWithFraction.PNG)
+**Print fractionnal result if not useless**
+![screenshot](/git_images/CaptureWithFraction.PNG)
 
 
 ## PDF

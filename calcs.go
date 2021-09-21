@@ -5,6 +5,15 @@ import (
 	"math"
 )
 
+// Newton’s method
+func Sqrt(x float64) float64 {
+	var z float64 = 1
+	for i := 1; i <= 10; i++ {
+		z = (z - (z*z-x)/(2*z))
+	}
+	return z
+}
+
 func degreeTwo(a float64, b float64, c float64) {
 	delta := (b * b) - 4*(a*c)
 	fmt.Printf("\n%sPolynomial degree:%s 2", string(colorB), string(colorReset))
@@ -13,8 +22,8 @@ func degreeTwo(a float64, b float64, c float64) {
 
 	// Δ > 0
 	if delta > 0 {
-		x1 := ((-b) + math.Sqrt(delta)) / (2 * a)
-		x2 := ((-b) - math.Sqrt(delta)) / (2 * a)
+		x1 := ((-b) + Sqrt(delta)) / (2 * a)
+		x2 := ((-b) - Sqrt(delta)) / (2 * a)
 		fmt.Println("\nDiscriminant is strictly positive, the two Real solutions are:")
 		fmt.Printf("%sx1:%s %g", string(colorG), string(colorReset), x1)
 		v, div := floatToFrac(x1)
@@ -44,8 +53,8 @@ func degreeTwo(a float64, b float64, c float64) {
 
 	// Δ < 0
 	if delta < 0 {
-		x1 := fmt.Sprintf("%g + i√%+g / %g\n", -b, delta, 2*a)
-		x2 := fmt.Sprintf("%g - i√%+g / %g\n", -b, delta, 2*a)
+		x1 := fmt.Sprintf("(%g + i√%+g) / %g\n", -b, -delta, 2*a)
+		x2 := fmt.Sprintf("(%g - i√%+g) / %g\n", -b, -delta, 2*a)
 		fmt.Println("\nDiscriminant is negative, the equation has no real solution, but has 2 complex solutions:")
 		fmt.Printf("%sx1:%s %s", string(colorG), string(colorReset), x1)
 		fmt.Printf("%sx2:%s %s\n", string(colorG), string(colorReset), x2)
@@ -76,7 +85,7 @@ func floatToFrac(x float64) (float64, float64) {
 		x = -x
 		isNeg = true
 	}
-	tolerance := 1.0E-6
+	tolerance := 1.0e-6
 	h1 := 1.0
 	k1 := 0.0
 	h2 := 0.0
