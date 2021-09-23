@@ -13,7 +13,12 @@ func spacetrim(str string) string {
 	return strings.Join(strings.Fields(str), "")
 }
 
+var degreeMap, degreeMap2 map[float64]float64
+
 func parser() (float64, float64, float64) {
+	degreeMap = make(map[float64]float64, len(degreeMap))
+	degreeMap2 = make(map[float64]float64, len(degreeMap2))
+
 	s1 := ""
 	if len(os.Args) == 2 {
 		//init equation
@@ -100,187 +105,205 @@ func parser() (float64, float64, float64) {
 		secondPart[0] = "+" + secondPart[0]
 	}
 
-	//init abc
-	a := 0.0
-	b := 0.0
-	c := 0.0
-	a2 := 0.0
-	b2 := 0.0
-	c2 := 0.0
-	degreeError := 0.0
-
 	for i := range firstPart {
 		firstPart[i] = strings.ToLower(firstPart[i])
-		if strings.Contains(firstPart[i], "*x^2") {
+		if strings.Contains(firstPart[i], "*x^") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			a += v
-		} else if strings.Contains(firstPart[i], "*x^1") {
-			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			b += v
-		} else if strings.Contains(firstPart[i], "*x^0") {
-			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-			c += v
-		} else if strings.Contains(firstPart[i], "x^2") {
-			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
-			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			a += v
+			degree, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
+			degreeMap[degree] += v
 		} else if strings.Contains(firstPart[i], "x^") {
-			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
+			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
+			degree, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
-			degreeError = v
+			degreeMap[degree] += v
 		} else if strings.Contains(firstPart[i], "x") {
 			v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
+			var degree float64 = 1
 			if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
 				v = 1
 			}
-			b += v
+			degreeMap[degree] += v
 		} else {
 			v, _ := strconv.ParseFloat(firstPart[i], 64)
-			c += v
-		}
-	}
-	for i := range secondPart {
-		secondPart[i] = strings.ToLower(secondPart[i])
-		if strings.Contains(secondPart[i], "*x^2") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			a2 += v
-		} else if strings.Contains(secondPart[i], "*x^1") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			b2 += v
-		} else if strings.Contains(secondPart[i], "*x^0") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-			c2 += v
-		} else if strings.Contains(secondPart[i], "x^2") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			a2 += v
-		} else if strings.Contains(secondPart[i], "x^") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
-			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			degreeError = v
-		} else if strings.Contains(secondPart[i], "x") {
-			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-				v = 1
-			}
-			b2 += v
-		} else {
-			v, _ := strconv.ParseFloat(secondPart[i], 64)
-			c2 += v
+			var degree float64 = 0
+			degreeMap[degree] += v
 		}
 	}
 
-	if degreeError > 0 {
-		fmt.Printf("%sError:%s Polynomial degree: %g\n", string(colorR), string(colorReset), degreeError)
-		fmt.Println("The polynomial degree is stricly greater than 2, I can't solve.")
-		os.Exit(42)
+	for i := range secondPart {
+		secondPart[i] = strings.ToLower(secondPart[i])
+		if strings.Contains(secondPart[i], "*x^") {
+			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
+			degree, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
+			degreeMap2[degree] += v
+		} else if strings.Contains(secondPart[i], "x^") {
+			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
+			degree, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+				v = 1
+			}
+			degreeMap2[degree] += v
+		} else if strings.Contains(secondPart[i], "x") {
+			v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
+			var degree float64 = 1
+			if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+				v = 1
+			}
+			degreeMap2[degree] += v
+		} else {
+			v, _ := strconv.ParseFloat(secondPart[i], 64)
+			var degree float64 = 0
+			degreeMap2[degree] += v
+		}
 	}
+
+	/*
+		for i := range firstPart {
+			firstPart[i] = strings.ToLower(firstPart[i])
+			if strings.Contains(firstPart[i], "*x^2") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
+				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				a += v
+			} else if strings.Contains(firstPart[i], "*x^1") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
+				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				b += v
+			} else if strings.Contains(firstPart[i], "*x^0") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
+				c += v
+			} else if strings.Contains(firstPart[i], "x^2") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
+				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				a += v
+			} else if strings.Contains(firstPart[i], "x^") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
+				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				degreeError = v
+			} else if strings.Contains(firstPart[i], "x") {
+				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
+				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				b += v
+			} else {
+				v, _ := strconv.ParseFloat(firstPart[i], 64)
+				c += v
+			}
+		}
+		for i := range secondPart {
+			secondPart[i] = strings.ToLower(secondPart[i])
+			if strings.Contains(secondPart[i], "*x^2") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
+				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				a2 += v
+			} else if strings.Contains(secondPart[i], "*x^1") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
+				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				b2 += v
+			} else if strings.Contains(secondPart[i], "*x^0") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
+				c2 += v
+			} else if strings.Contains(secondPart[i], "x^2") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
+				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				a2 += v
+			} else if strings.Contains(secondPart[i], "x^") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
+				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				degreeError = v
+			} else if strings.Contains(secondPart[i], "x") {
+				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
+				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
+					v = 1
+				}
+				b2 += v
+			} else {
+				v, _ := strconv.ParseFloat(secondPart[i], 64)
+				c2 += v
+			}
+		}
+
+
+		if degreeError > 0 {
+			fmt.Printf("%sError:%s Polynomial degree: %g\n", string(colorR), string(colorReset), degreeError)
+			fmt.Println("The polynomial degree is stricly greater than 2, I can't solve.")
+			os.Exit(42)
+		}
+	*/
+
 	//
 	// print readable
 	//
 	fmt.Printf("%sHuman readable:%s\n", string(colorP), string(colorReset))
 	//print first part
-	if a != 0 {
-		if a == 1 {
-			fmt.Printf("+x^2")
-		} else if a == -1 {
-			fmt.Printf("-x^2")
+	for key, element := range degreeMap {
+		if key == 0 {
+			fmt.Printf("%+g ", element)
+		} else if key == 1 {
+			fmt.Printf("%+gx ", element)
 		} else {
-			fmt.Printf("%+gx^2", a)
+			fmt.Printf("%+gx^%g ", element, key)
 		}
-	}
-	if b != 0 {
-		if b == 1 {
-			fmt.Printf(" +x")
-		} else if b == -1 {
-			fmt.Printf(" -x")
-		} else {
-			fmt.Printf(" %+gx", b)
-		}
-	}
-	if c != 0 {
-		fmt.Printf(" %+g", c)
 	}
 	fmt.Printf(" = ")
 	//print second part
-	if c2 == 0 && b2 == 0 && a2 == 0 {
-		fmt.Printf("0")
-	} else {
-		if a2 != 0 {
-			if a2 == 1 {
-				fmt.Printf("+x^2")
-			} else if a2 == -1 {
-				fmt.Printf("-x^2")
-			} else {
-				fmt.Printf("%+gx^2", a2)
-			}
-		}
-		if b2 != 0 {
-			if b2 == 1 {
-				fmt.Printf(" +x")
-			} else if b2 == -1 {
-				fmt.Printf(" -x")
-			} else {
-				fmt.Printf(" %+gx", b2)
-			}
-		}
-		if c2 != 0 {
-			fmt.Printf(" %+g", c2)
+	for key, element := range degreeMap2 {
+		if key == 0 {
+			fmt.Printf("%+g ", element)
+		} else if key == 1 {
+			fmt.Printf("%+gx ", element)
+		} else {
+			fmt.Printf("%+gx^%g ", element, key)
 		}
 	}
-
-	//get reduced form
-	a = a + -a2
-	b = b + -b2
-	c = c + -c2
 
 	//print reduced form
 	fmt.Printf("\n\n%sReduced form:%s\n", string(colorT), string(colorReset))
-	if c == 0 && b == 0 && a == 0 {
-		fmt.Println("0 = 0")
-	} else {
-		if a != 0 {
-			if a == 1 {
-				fmt.Printf("+x^2")
-			} else if a == -1 {
-				fmt.Printf("-x^2")
-			} else {
-				fmt.Printf("%+gx^2", a)
-			}
-		}
-		if b != 0 {
-			if b == 1 {
-				fmt.Printf(" +x")
-			} else if b == -1 {
-				fmt.Printf(" -x")
-			} else {
-				fmt.Printf(" %+gx", b)
-			}
-		}
-		if c != 0 {
-			fmt.Printf(" %+g", c)
-		}
-		fmt.Println(" = 0")
+	for key, element := range degreeMap2 {
+		degreeMap[key] -= element
+		degreeMap2[key] = 0
 	}
-	return a, b, c
+	//print first part
+	for key, element := range degreeMap {
+		if key == 0 {
+			fmt.Printf("%+g ", element)
+		} else if key == 1 {
+			fmt.Printf("%+gx ", element)
+		} else {
+			fmt.Printf("%+gx^%g ", element, key)
+		}
+	}
+	fmt.Printf(" = 0\n")
+
+	var errorDegree []float64
+	for key := range degreeMap {
+		if key != 0 && key != 1 && key != 2 {
+			errorDegree = append(errorDegree, key)
+		}
+	}
+	if len(errorDegree) > 0 {
+		fmt.Printf("\n%sError:%s Polynomial degree: %g\n", string(colorR), string(colorReset), errorDegree)
+		fmt.Print("I can't solve polynomial degree outside of [0, 1, 2]. ")
+		os.Exit(42)
+	}
+
+	return degreeMap[2], degreeMap[1], degreeMap[0]
 }
