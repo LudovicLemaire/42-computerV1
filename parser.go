@@ -281,7 +281,6 @@ func parser() (float64, float64, float64) {
 		degreeMap[key] -= element
 		degreeMap2[key] = 0
 	}
-	//print first part
 	for key, element := range degreeMap {
 		if key == 0 {
 			fmt.Printf("%+g ", element)

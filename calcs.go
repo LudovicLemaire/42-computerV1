@@ -69,7 +69,7 @@ func degreeTwo(a float64, b float64, c float64) {
 		fmt.Printf("%sx2:%s α + iβ\n\n", string(colorT), string(colorReset))
 
 		fmt.Printf("%sx1:%s (-b - i√(-Δ)) / 2a\n", string(colorT), string(colorReset))
-		fmt.Printf("%sx1:%s (-b + i√(-Δ)) / 2a\n", string(colorT), string(colorReset))
+		fmt.Printf("%sx2:%s (-b + i√(-Δ)) / 2a\n\n", string(colorT), string(colorReset))
 
 		fmt.Printf("%sx1:%s %s\n", string(colorT), string(colorReset), "(-b / 2a) - (i√(Δ) / 2a)")
 		fmt.Printf("%sx2:%s %s\n\n", string(colorT), string(colorReset), "(-b / 2a) + (i√(Δ) / 2a)")
