@@ -293,9 +293,11 @@ func parser() (float64, float64, float64) {
 	fmt.Printf(" = 0\n")
 
 	var errorDegree []float64
-	for key := range degreeMap {
+	for key, element := range degreeMap {
 		if key != 0 && key != 1 && key != 2 {
-			errorDegree = append(errorDegree, key)
+			if element != 0 {
+				errorDegree = append(errorDegree, key)
+			}
 		}
 	}
 	if len(errorDegree) > 0 {
