@@ -159,96 +159,6 @@ func parser() (float64, float64, float64) {
 		}
 	}
 
-	/*
-		for i := range firstPart {
-			firstPart[i] = strings.ToLower(firstPart[i])
-			if strings.Contains(firstPart[i], "*x^2") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				a += v
-			} else if strings.Contains(firstPart[i], "*x^1") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				b += v
-			} else if strings.Contains(firstPart[i], "*x^0") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "*")[0], 64)
-				c += v
-			} else if strings.Contains(firstPart[i], "x^2") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
-				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				a += v
-			} else if strings.Contains(firstPart[i], "x^") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "^")[1], 64)
-				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				degreeError = v
-			} else if strings.Contains(firstPart[i], "x") {
-				v, _ := strconv.ParseFloat(strings.Split(firstPart[i], "x")[0], 64)
-				if v == 0 && len(strings.Split(firstPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				b += v
-			} else {
-				v, _ := strconv.ParseFloat(firstPart[i], 64)
-				c += v
-			}
-		}
-		for i := range secondPart {
-			secondPart[i] = strings.ToLower(secondPart[i])
-			if strings.Contains(secondPart[i], "*x^2") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				a2 += v
-			} else if strings.Contains(secondPart[i], "*x^1") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				b2 += v
-			} else if strings.Contains(secondPart[i], "*x^0") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "*")[0], 64)
-				c2 += v
-			} else if strings.Contains(secondPart[i], "x^2") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				a2 += v
-			} else if strings.Contains(secondPart[i], "x^") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "^")[1], 64)
-				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				degreeError = v
-			} else if strings.Contains(secondPart[i], "x") {
-				v, _ := strconv.ParseFloat(strings.Split(secondPart[i], "x")[0], 64)
-				if v == 0 && len(strings.Split(secondPart[i], "x")[0]) == 1 {
-					v = 1
-				}
-				b2 += v
-			} else {
-				v, _ := strconv.ParseFloat(secondPart[i], 64)
-				c2 += v
-			}
-		}
-
-
-		if degreeError > 0 {
-			fmt.Printf("%sError:%s Polynomial degree: %g\n", string(colorR), string(colorReset), degreeError)
-			fmt.Println("The polynomial degree is stricly greater than 2, I can't solve.")
-			os.Exit(42)
-		}
-	*/
-
 	//
 	// print readable
 	//
@@ -282,11 +192,11 @@ func parser() (float64, float64, float64) {
 		degreeMap2[key] = 0
 	}
 	for key, element := range degreeMap {
-		if key == 0 {
+		if key == 0 && element != 0 {
 			fmt.Printf("%+g ", element)
-		} else if key == 1 {
+		} else if key == 1 && element != 0 {
 			fmt.Printf("%+gx ", element)
-		} else {
+		} else if element != 0 {
 			fmt.Printf("%+gx^%g ", element, key)
 		}
 	}
